@@ -151,6 +151,100 @@
             text-align: center;
         }
 
+        /* Estilos para el Menú Informativo Desplegable (tarjetas interactivas) */
+        .interactive-card {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            user-select: none;
+        }
+
+        /* Efecto sutil al tocar en celular */
+        .interactive-card:active {
+            background-color: #fbfbfb;
+            transform: scale(0.99);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .arrow-icon {
+            color: #f57c00;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .view-meats-badge {
+            font-size: 0.75rem;
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(211, 47, 47, 0.15);
+            animation: bounceIndicator 2s infinite;
+        }
+
+        @keyframes bounceIndicator {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .meat-dropdown-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease-out, opacity 0.2s ease;
+            opacity: 0;
+        }
+
+        .interactive-card.expanded .meat-dropdown-list {
+            max-height: 180px;
+            opacity: 1;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+        }
+
+        .interactive-card.expanded .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-subtitle {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .meat-badge-grid {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .meat-tag {
+            background-color: #fff3e0;
+            color: #e65100;
+            border: 1px solid #ffe0b2;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+        }
+
         /* --- Contenedor del Menú --- */
         .menu-container {
             padding: 15px;
@@ -283,6 +377,64 @@
             font-size: 1.5rem;
         }
 
+        /* Glassmorphism para header y botón WhatsApp */
+        header {
+            background-color: rgba(255,255,255,0.65);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            transition: background-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        header.scrolled {
+            background-color: rgba(255,255,255,0.78);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        }
+
+        .whatsapp-float {
+            background-color: rgba(37, 211, 102, 0.92);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+
+        /* Skeleton loaders para imágenes */
+        .image-wrap {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            flex: 0 0 80px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #ffe0b2;
+        }
+
+        .image-wrap .item-image {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .image-skeleton {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #eee 0%, #f6f6f6 40%, #eee 80%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.2s linear infinite;
+        }
+
+        @keyframes skeletonShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .image-wrap.loaded .image-skeleton {
+            opacity: 0;
+            transform: scaleX(0.98);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            pointer-events: none;
+        }
+
         /* Ocultar elementos filtrados */
         .hidden {
             display: none !important;
@@ -316,73 +468,88 @@
     <main class="menu-container">
         <!-- Precios extraídos de image_c22a23.jpg -->
 
-        <!-- CATEGORÍA: TORTAS -->
-        <div class="menu-item category-tortas clickable" onclick="toggleMeatPanel(this)">
-            <!-- Puedes reemplazar el 'src' por fotos reales de tus platillos -->
+        <!-- CATEGORÍA: TORTAS (Tarjeta interactiva) -->
+        <div class="menu-item category-tortas clickable interactive-card" onclick="toggleMenuOptions(this)">
             <img src="torta.png" alt="Torta" class="item-image">
             <div class="item-details">
-                <h3 class="item-title">Torta Carnitas</h3>
-                <p class="item-desc">Bolillo crujiente con jugosa carne de carnitas y lechuga (opcional).</p>
-                <div class="item-price">$32.00</div>
-            </div>
-        </div>
-        <div class="meat-panel" aria-hidden="true">
-            <div class="meat-panel-inner">
-                <strong>Carnes disponibles</strong>
-                <ul>
-                    <li>Maciza</li>
-                    <li>Surtida</li>
-                    <li>Chamorro</li>
-                    <li>Espaldilla</li>
-                    <li>Aldilla</li>
-                    <li>Buche</li>
-                </ul>
+                <div class="item-header">
+                    <h3 class="item-title">Torta Carnitas</h3>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </div>
+                <p class="item-desc">El clásico bolillo doradito y crujiente, bien servido con la carne jugosa de tu elección. Lleva cama de lechuga fresca (o pídelo sin ella, ¡tú mandas!).</p>
+                <div class="item-footer">
+                    <div class="item-price">$32.00</div>
+                    <span class="view-meats-badge">Ver carnes 🐷</span>
+                </div>
+
+                <div class="meat-dropdown-list" aria-hidden="true">
+                    <p class="dropdown-subtitle">Disponible en cualquiera de estas carnes:</p>
+                    <div class="meat-badge-grid">
+                        <span class="meat-tag">Maciza</span>
+                        <span class="meat-tag">Surtida</span>
+                        <span class="meat-tag">Chamorro</span>
+                        <span class="meat-tag">Espaldilla</span>
+                        <span class="meat-tag">Aldilla</span>
+                        <span class="meat-tag">Buche</span>
+                    </div>
+                </div>
             </div>
         </div>
 
 
-        <!-- CATEGORÍA: TACOS Y KILOS -->
-        <div class="menu-item category-tacos clickable" onclick="toggleMeatPanel(this)">
+        <!-- CATEGORÍA: TACOS (Tarjeta interactiva) -->
+        <div class="menu-item category-tacos clickable interactive-card" onclick="toggleMenuOptions(this)">
             <img src="taco.png" alt="Tacos" class="item-image">
             <div class="item-details">
-                <h3 class="item-title">Taco Carnitas</h3>
-                <p class="item-desc">Tortilla caliente rellena de carne de carnitas y lechuga (opcional), lista para antojar.</p>
-                <div class="item-price">$12.00</div>
-            </div>
-        </div>
-        <div class="meat-panel" aria-hidden="true">
-            <div class="meat-panel-inner">
-                <strong>Carnes disponibles</strong>
-                <ul>
-                    <li>Maciza</li>
-                    <li>Surtida</li>
-                    <li>Chamorro</li>
-                    <li>Espaldilla</li>
-                    <li>Aldilla</li>
-                    <li>Buche</li>
-                </ul>
+                <div class="item-header">
+                    <h3 class="item-title">Taco Carnitas</h3>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </div>
+                <p class="item-desc">Tortilla suave y calientita con una porción generosa de nuestra carne tradicional. Coronado con lechuga fresca a tu gusto.</p>
+                <div class="item-footer">
+                    <div class="item-price">$12.00</div>
+                    <span class="view-meats-badge">Ver carnes 🐷</span>
+                </div>
+
+                <div class="meat-dropdown-list" aria-hidden="true">
+                    <p class="dropdown-subtitle">Disponible en cualquiera de estas carnes:</p>
+                    <div class="meat-badge-grid">
+                        <span class="meat-tag">Maciza</span>
+                        <span class="meat-tag">Surtida</span>
+                        <span class="meat-tag">Chamorro</span>
+                        <span class="meat-tag">Espaldilla</span>
+                        <span class="meat-tag">Aldilla</span>
+                        <span class="meat-tag">Buche</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="menu-item category-kilos clickable" onclick="toggleMeatPanel(this)">
+        <!-- CATEGORÍA: KILOS (Tarjeta interactiva) -->
+        <div class="menu-item category-kilos clickable interactive-card" onclick="toggleMenuOptions(this)">
             <img src="kilocarnitas.png" alt="Carne por Kilo" class="item-image">
             <div class="item-details">
-                <h3 class="item-title">Kilo Carnitas</h3>
-                <p class="item-desc">Kilo de la carne que pidas; incluye tortillas, salsas, chiles y lechuga para compartir.</p>
-                <div class="item-price">$320.00</div>
-            </div>
-        </div>
-        <div class="meat-panel" aria-hidden="true">
-            <div class="meat-panel-inner">
-                <strong>Carnes disponibles</strong>
-                <ul>
-                    <li>Maciza</li>
-                    <li>Surtida</li>
-                    <li>Chamorro</li>
-                    <li>Espaldilla</li>
-                    <li>Aldilla</li>
-                    <li>Buche</li>
-                </ul>
+                <div class="item-header">
+                    <h3 class="item-title">Kilo Carnitas</h3>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </div>
+                <p class="item-desc">Un kilo de puro sabor con la carne de tu elección, perfecto para compartir. Incluye el paquete taquero completo: tortillas calientitas, lechuga fresca, chiles y nuestras salsas de la casa.</p>
+                <div class="item-footer">
+                    <div class="item-price">$320.00</div>
+                    <span class="view-meats-badge">Ver carnes 🐷</span>
+                </div>
+
+                <div class="meat-dropdown-list" aria-hidden="true">
+                    <p class="dropdown-subtitle">Disponible en cualquiera de estas carnes:</p>
+                    <div class="meat-badge-grid">
+                        <span class="meat-tag">Maciza</span>
+                        <span class="meat-tag">Surtida</span>
+                        <span class="meat-tag">Chamorro</span>
+                        <span class="meat-tag">Espaldilla</span>
+                        <span class="meat-tag">Aldilla</span>
+                        <span class="meat-tag">Buche</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -480,6 +647,34 @@
             } else {
                 panel.style.maxHeight = '0';
             }
+        }
+
+        // Función para tarjetas interactivas dentro de la tarjeta (meat-dropdown-list)
+        function toggleMenuOptions(card) {
+            // alterna la clase expanded en la tarjeta
+            card.classList.toggle('expanded');
+
+            const dropdown = card.querySelector('.meat-dropdown-list');
+            if (!dropdown) return;
+
+            const isOpen = card.classList.contains('expanded');
+            dropdown.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+            if (isOpen) {
+                dropdown.style.maxHeight = dropdown.scrollHeight + 'px';
+            } else {
+                dropdown.style.maxHeight = '0';
+            }
+
+            // Cerrar otros dropdowns abiertos para mantener solo uno abierto
+            document.querySelectorAll('.interactive-card.expanded').forEach(other => {
+                if (other === card) return;
+                other.classList.remove('expanded');
+                const od = other.querySelector('.meat-dropdown-list');
+                if (od) {
+                    od.setAttribute('aria-hidden', 'true');
+                    od.style.maxHeight = '0';
+                }
+            });
         }
     </script>
 </body>
