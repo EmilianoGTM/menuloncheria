@@ -99,6 +99,58 @@
             box-shadow: 0 4px 6px rgba(211, 47, 47, 0.3);
         }
 
+        .menu-item.clickable {
+            cursor: pointer;
+        }
+
+        .meat-panel {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.28s ease, opacity 0.2s ease;
+            margin-top: 0;
+            padding: 0 12px;
+        }
+
+        .meat-panel.open {
+            opacity: 1;
+            max-height: 220px;
+            margin-top: 12px;
+        }
+
+        .meat-panel-inner {
+            background: #fff7ed;
+            border: 1px solid #f4c4a9;
+            border-radius: 16px;
+            padding: 12px 14px;
+        }
+
+        .meat-panel-inner strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #7a451c;
+            font-size: 0.95rem;
+        }
+
+        .meat-panel-inner ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .meat-panel-inner li {
+            background: #ffe9d6;
+            color: #7a451c;
+            padding: 8px 10px;
+            border-radius: 999px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
         /* --- Contenedor del Menú --- */
         .menu-container {
             padding: 15px;
@@ -243,7 +295,7 @@
     <header>
         <div class="logo-container">
             <!-- Imagen del cerdito referenciada aquí -->
-            <img src="cerdito.jpeg" alt="Mascota Lonchería Muñoz">
+            <img src="cerdito.png" alt="Mascota Lonchería Muñoz">
             <div>
                 <h1>Lonchería Muñoz</h1>
                 <p>Tacos y Tortas de Carnitas</p>
@@ -254,7 +306,8 @@
         <div class="nav-filters">
             <button class="filter-btn active" onclick="filterMenu('all', this)">Todos</button>
             <button class="filter-btn" onclick="filterMenu('tortas', this)">Tortas</button>
-            <button class="filter-btn" onclick="filterMenu('tacos', this)">Tacos & Kilos</button>
+            <button class="filter-btn" onclick="filterMenu('tacos', this)">Tacos</button>
+            <button class="filter-btn" onclick="filterMenu('kilos', this)">Kilos</button>
             <button class="filter-btn" onclick="filterMenu('bebidas', this)">Bebidas</button>
         </div>
     </header>
@@ -264,7 +317,7 @@
         <!-- Precios extraídos de image_c22a23.jpg -->
 
         <!-- CATEGORÍA: TORTAS -->
-        <div class="menu-item category-tortas">
+        <div class="menu-item category-tortas clickable" onclick="toggleMeatPanel(this)">
             <!-- Puedes reemplazar el 'src' por fotos reales de tus platillos -->
             <img src="torta.png" alt="Torta" class="item-image">
             <div class="item-details">
@@ -273,23 +326,62 @@
                 <div class="item-price">$32.00</div>
             </div>
         </div>
+        <div class="meat-panel" aria-hidden="true">
+            <div class="meat-panel-inner">
+                <strong>Carnes disponibles</strong>
+                <ul>
+                    <li>Maciza</li>
+                    <li>Surtida</li>
+                    <li>Chamorro</li>
+                    <li>Espaldilla</li>
+                    <li>Aldilla</li>
+                    <li>Buche</li>
+                </ul>
+            </div>
+        </div>
 
 
         <!-- CATEGORÍA: TACOS Y KILOS -->
-        <div class="menu-item category-tacos">
+        <div class="menu-item category-tacos clickable" onclick="toggleMeatPanel(this)">
             <img src="taco.png" alt="Tacos" class="item-image">
             <div class="item-details">
                 <h3 class="item-title">Taco Carnitas</h3>
                 <div class="item-price">$12.00</div>
             </div>
         </div>
+        <div class="meat-panel" aria-hidden="true">
+            <div class="meat-panel-inner">
+                <strong>Carnes disponibles</strong>
+                <ul>
+                    <li>Maciza</li>
+                    <li>Surtida</li>
+                    <li>Chamorro</li>
+                    <li>Espaldilla</li>
+                    <li>Aldilla</li>
+                    <li>Buche</li>
+                </ul>
+            </div>
+        </div>
 
-        <div class="menu-item category-tacos">
+        <div class="menu-item category-kilos clickable" onclick="toggleMeatPanel(this)">
             <img src="kilocarnitas.png" alt="Carne por Kilo" class="item-image">
             <div class="item-details">
                 <h3 class="item-title">Kilo Carnitas</h3>
                 <p class="item-desc">Ideal para compartir en familia.</p>
                 <div class="item-price">$320.00</div>
+            </div>
+        </div>
+        <div class="meat-panel" aria-hidden="true">
+            <div class="meat-panel-inner">
+                <strong>Carnes disponibles</strong>
+                <ul>
+                    <li>Maciza</li>
+                    <li>Surtida</li>
+                    <li>Chamorro</li>
+                    <li>Espaldilla</li>
+                    <li>Aldilla</li>
+                    <li>Buche</li>
+                </ul>
             </div>
         </div>
 
@@ -361,6 +453,32 @@
                     }
                 }
             });
+
+            document.querySelectorAll('.meat-panel').forEach(panel => {
+                panel.classList.remove('open');
+                panel.setAttribute('aria-hidden', 'true');
+            });
+        }
+
+        function toggleMeatPanel(card) {
+            const panel = card.nextElementSibling;
+            if (!panel || !panel.classList.contains('meat-panel')) return;
+
+            document.querySelectorAll('.meat-panel.open').forEach(openPanel => {
+                if (openPanel !== panel) {
+                    openPanel.classList.remove('open');
+                    openPanel.setAttribute('aria-hidden', 'true');
+                    openPanel.style.maxHeight = '0';
+                }
+            });
+
+            const open = panel.classList.toggle('open');
+            panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+            if (open) {
+                panel.style.maxHeight = panel.scrollHeight + 'px';
+            } else {
+                panel.style.maxHeight = '0';
+            }
         }
     </script>
 </body>
