@@ -435,6 +435,59 @@
             pointer-events: none;
         }
 
+        .item-image {
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+
+        .item-image:hover {
+            transform: scale(1.03);
+        }
+
+        .image-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2000;
+        }
+
+        .image-modal.show {
+            display: flex;
+        }
+
+        .image-modal-content {
+            position: relative;
+            max-width: min(92vw, 560px);
+            max-height: 90vh;
+        }
+
+        .image-modal img {
+            width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+            background: white;
+        }
+
+        .image-modal-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.35rem;
+            color: #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
         /* Ocultar elementos filtrados */
         .hidden {
             display: none !important;
@@ -461,6 +514,7 @@
             <button class="filter-btn" onclick="filterMenu('tacos', this)">Tacos</button>
             <button class="filter-btn" onclick="filterMenu('kilos', this)">Kilos</button>
             <button class="filter-btn" onclick="filterMenu('bebidas', this)">Bebidas</button>
+            <button class="filter-btn" onclick="filterMenu('extras', this)">Extras</button>
         </div>
     </header>
 
@@ -477,8 +531,8 @@
                     <i class="fa-solid fa-chevron-down arrow-icon"></i>
                 </div>
                 <p class="item-desc">El clásico bolillo doradito y crujiente, bien servido con la carne jugosa de tu elección. Lleva cama de lechuga fresca (o pídelo sin ella, ¡tú mandas!).</p>
-                <div class="item-footer">
-                    <div class="item-price">$32.00</div>
+                <div class="item-footer" data-price="60.00">
+                    <div class="item-price">$60.00</div>
                     <span class="view-meats-badge">Ver carnes 🐷</span>
                 </div>
 
@@ -491,6 +545,7 @@
                         <span class="meat-tag">Espaldilla</span>
                         <span class="meat-tag">Aldilla</span>
                         <span class="meat-tag">Buche</span>
+                        <span class="meat-tag">Costilla</span>
                     </div>
                 </div>
             </div>
@@ -506,8 +561,8 @@
                     <i class="fa-solid fa-chevron-down arrow-icon"></i>
                 </div>
                 <p class="item-desc">Tortilla suave y calientita con una porción generosa de nuestra carne tradicional. Coronado con lechuga fresca a tu gusto.</p>
-                <div class="item-footer">
-                    <div class="item-price">$12.00</div>
+                <div class="item-footer" data-price="23.00">
+                    <div class="item-price">$23.00</div>
                     <span class="view-meats-badge">Ver carnes 🐷</span>
                 </div>
 
@@ -520,10 +575,34 @@
                         <span class="meat-tag">Espaldilla</span>
                         <span class="meat-tag">Aldilla</span>
                         <span class="meat-tag">Buche</span>
+                        <span class="meat-tag">Costilla</span>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- CATEGORÍA: TORTAS (Torta Mini) -->
+        <div class="menu-item category-tortas clickable interactive-card" onclick="toggleMenuOptions(this)">
+            <img src="torta.png" alt="Torta Mini" class="item-image">
+            <div class="item-details">
+                <div class="item-header">
+                    <h3 class="item-title">Torta Mini</h3>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </div>
+                <p class="item-desc">Una versión más pequeña de nuestra clásica torta, perfecta para un antojo ligero. Con la carne jugosa de tu elección.</p>
+                <div class="item-footer" data-price="30.00">
+                    <div class="item-price">$30.00</div>
+                    <span class="view-meats-badge">Ver carnes 🐷</span>
+                </div>
+                <div class="meat-dropdown-list" aria-hidden="true">
+                    <p class="dropdown-subtitle">Disponible en cualquiera de estas carnes:</p>
+                    <div class="meat-badge-grid">
+                        <span class="meat-tag">Maciza</span><span class="meat-tag">Surtida</span><span class="meat-tag">Chamorro</span><span class="meat-tag">Espaldilla</span><span class="meat-tag">Aldilla</span><span class="meat-tag">Buche</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- CATEGORÍA: KILOS (Tarjeta interactiva) -->
         <div class="menu-item category-kilos clickable interactive-card" onclick="toggleMenuOptions(this)">
@@ -534,8 +613,8 @@
                     <i class="fa-solid fa-chevron-down arrow-icon"></i>
                 </div>
                 <p class="item-desc">Un kilo de puro sabor con la carne de tu elección, perfecto para compartir. Incluye el paquete taquero completo: tortillas calientitas, lechuga fresca, chiles y nuestras salsas de la casa.</p>
-                <div class="item-footer">
-                    <div class="item-price">$320.00</div>
+                <div class="item-footer" data-price="500.00">
+                    <div class="item-price">$500.00</div>
                     <span class="view-meats-badge">Ver carnes 🐷</span>
                 </div>
 
@@ -548,6 +627,29 @@
                         <span class="meat-tag">Espaldilla</span>
                         <span class="meat-tag">Aldilla</span>
                         <span class="meat-tag">Buche</span>
+                        <span class="meat-tag">Costilla</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CATEGORÍA: KILOS (Costillas) -->
+        <div class="menu-item category-kilos clickable interactive-card" onclick="toggleMenuOptions(this)">
+            <img src="costillas.jpg" alt="Costillas por Kilo" class="item-image"> <!-- Reemplazar con imagen de costillas si está disponible -->
+            <div class="item-details">
+                <div class="item-header">
+                    <h3 class="item-title">Costillas</h3>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </div>
+                <p class="item-desc">Deliciosas costillas de cerdo, se venden por pieza y se cobran por peso. ¡Pregunta por la disponibilidad del día!</p>
+                <div class="item-footer">
+                    <div class="item-price">Por peso ($500/kg)</div>
+                    <span class="view-meats-badge">Ver carnes 🐷</span>
+                </div>
+                <div class="meat-dropdown-list" aria-hidden="true">
+                    <p class="dropdown-subtitle">Disponibles en:</p>
+                    <div class="meat-badge-grid">
+                        <span class="meat-tag">Costilla</span>
                     </div>
                 </div>
             </div>
@@ -558,7 +660,7 @@
             <img src="refresco.webp" alt="Refresco" class="item-image">
             <div class="item-details">
                 <h3 class="item-title">Refresco 600ml</h3>
-                <div class="item-price">$18.00</div>
+                <div class="item-price">$30.00</div>
             </div>
         </div>
 
@@ -566,7 +668,43 @@
             <img src="refrescomini.webp" alt="Refresco Mini" class="item-image">
             <div class="item-details">
                 <h3 class="item-title">Refresco Mini</h3>
-                <div class="item-price">$12.00</div>
+                <div class="item-price">$25.00</div>
+            </div>
+        </div>
+
+        <div class="menu-item category-bebidas">
+            <img src="aguas.jfif" alt="Agua de Sabor" class="item-image"> <!-- Considerar una imagen específica para agua de sabor -->
+            <div class="item-details">
+                <h3 class="item-title">Agua de Sabor</h3>
+                <div class="item-price">$30.00</div>
+            </div>
+        </div>
+
+        <div class="menu-item category-bebidas">
+            <img src="aguanatural.webp" alt="Agua Natural" class="item-image"> <!-- Considerar una imagen específica para agua natural -->
+            <div class="item-details">
+                <h3 class="item-title">Agua Natural 500ml</h3>
+                <p class="item-desc">Agua purificada.</p>
+                <div class="item-price">$15.00</div>
+            </div>
+        </div>
+
+        <!-- CATEGORÍA: EXTRAS -->
+        <div class="menu-item category-extras">
+            <img src="bolillo.webp" alt="Pieza de Bolillo" class="item-image"> <!-- Reemplazar con imagen de bolillo si está disponible -->
+            <div class="item-details">
+                <h3 class="item-title">Pieza de Bolillo</h3>
+                <p class="item-desc">Bolillo fresco para acompañar tus platillos.</p>
+                <div class="item-price">$10.00</div>
+            </div>
+        </div>
+
+        <div class="menu-item category-extras">
+            <img src="salsa.png" alt="Salsa Extra" class="item-image"> <!-- Reemplazar con imagen de salsa si está disponible -->
+            <div class="item-details">
+                <h3 class="item-title">Salsa Extra (para llevar)</h3>
+                <p class="item-desc">Porción adicional de nuestra deliciosa salsa casera.</p>
+                <div class="item-price">$20.00</div>
             </div>
         </div>
     </main>
@@ -598,6 +736,13 @@
         <span>Hacer pedido</span>
     </a>
 
+    <div id="imageModal" class="image-modal" role="dialog" aria-modal="true" aria-label="Vista ampliada del producto">
+        <div class="image-modal-content">
+            <button class="image-modal-close" type="button" aria-label="Cerrar vista ampliada">×</button>
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+
     <!-- Lógica JavaScript para los filtros -->
     <script>
         function filterMenu(category, element) {
@@ -622,6 +767,11 @@
                 }
             });
 
+            // Close any open dropdowns when filtering
+            document.querySelectorAll('.interactive-card.expanded').forEach(card => {
+                card.classList.remove('expanded');
+                card.querySelector('.meat-dropdown-list').style.maxHeight = '0';
+            });
             document.querySelectorAll('.meat-panel').forEach(panel => {
                 panel.classList.remove('open');
                 panel.setAttribute('aria-hidden', 'true');
@@ -676,6 +826,47 @@
                 }
             });
         }
+
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const closeModalBtn = document.querySelector('.image-modal-close');
+
+        function openImageModal(src, alt) {
+            modalImage.src = src;
+            modalImage.alt = alt;
+            imageModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            imageModal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.menu-item .item-image').forEach(img => {
+            img.addEventListener('click', (event) => {
+                event.stopPropagation();
+                openImageModal(img.src, img.alt);
+            });
+        });
+
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', closeImageModal);
+        }
+
+        if (imageModal) {
+            imageModal.addEventListener('click', (event) => {
+                if (event.target === imageModal) {
+                    closeImageModal();
+                }
+            });
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && imageModal.classList.contains('show')) {
+                closeImageModal();
+            }
+        });
     </script>
 </body>
 </html>
